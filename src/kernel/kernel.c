@@ -5,6 +5,6 @@
 #endif
 void kernel_main(void * multiboot_structure, unsigned int magicnumber){
 
-	printf("Hello World x86-64, long mode!");
-	return 0;
+  printf("Hello World x86-64, long mode!");
+  while(1);
 }
