@@ -9,10 +9,11 @@ Thanks to https://intermezzos.github.io/book/first-edition/preface.html that giv
 * make
 * gcc
 * grub-mkrescue
+* xorriso
 * nasm
 * qemu
 
-Tested on Debian Stretch.
+Tested on Debian Stretch and Arch Linux.
 
 ---
 
