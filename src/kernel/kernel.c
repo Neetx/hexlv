@@ -1,4 +1,4 @@
-#include "../lib/test_library.h"
+#include "test_library.h"
 
 #if defined(__cplusplus)
 	extern "C" /* Use C*/
