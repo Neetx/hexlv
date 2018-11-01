@@ -18,8 +18,8 @@ start:
 	lgdt [gdt64.pointer]	; load global descriptor table
 
 	;gdt loaded
-	;update segment registers, they are 16 bit so we use ax
 
+	;update segment registers, they are 16 bit so we use ax
 	mov ax, gdt64.data
 	mov ss, ax		; stack segment
 	mov ds, ax		; data segment
@@ -27,10 +27,9 @@ start:
 	mov fs, ax		; TIB pointer
 	mov gs, ax		; TLS pointer
 
-	;jump to long mode
-	
-	jmp gdt64.code:kernel_main  ;long jump to update code selector register with our entry in gdt
-	
+	;jump to long mode	
+	jmp gdt64.code:start64
+	;long jump to update code selector register with our entry in gdt
 	;code selector cannot be updated manually
 
 	hlt
@@ -134,7 +133,7 @@ error:
 	mov dword[0xb8008], 0x4f204f20
 	mov byte[0xb800a], al
 	hlt
-
+	
 section .bss
 align 4096
 
@@ -164,3 +163,13 @@ gdt64:
 .pointer:
 	dw .pointer - gdt64 - 1
 	dq gdt64
+
+;long mode
+section .text
+bits 64
+
+global start64
+start64:
+	call kernel_main
+	cli
+	hlt
