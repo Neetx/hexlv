@@ -62,7 +62,7 @@ check_cpuid:
 	jmp error
 
 check_long:
-	; test extended processor infp
+	; test extended processor info
 	mov eax, 0x80000000
 	cpuid 					; get highest supported argument
 	cmp eax, 0x80000001		; if highest is less cpu understand us
@@ -144,7 +144,7 @@ p3_table:
 p2_table:
 	resb 4096
 stack_bottom:
-	resb 64
+	resb 4096
 stack_top:
 
 section .rodata

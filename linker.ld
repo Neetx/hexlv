@@ -13,4 +13,25 @@ SECTIONS
 	{
 		*(.text)
 	}
+
+	.rodata :
+	{
+		*(.rodata)
+	}
+
+	.data :
+	{
+		*(.data)
+	}
+
+	.code :
+	{
+		*(.code)
+	}
+
+	.bss :
+	{	
+		*(COMMON)
+		*(.bss)
+	}
 }
