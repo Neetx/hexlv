@@ -3,7 +3,14 @@
 #include <stdint.h>
 
 #include <kernel/tty.h>
+#include <kernel/io.h>
 #include "vga.h"
+
+#define FB_COMMAND_PORT 0x3D4
+#define FB_DATA_PORT 0x3D5
+
+#define FB_HIGH_BYTE_COMMAND 14
+#define FB_LOW_BYTE_COMMAND 15
 
 static const size_t VGA_WIDTH = 80;
 static const size_t VGA_HEIGHT = 25;
@@ -13,6 +20,7 @@ size_t terminal_row;
 size_t terminal_column;
 uint8_t terminal_color;
 uint16_t *terminal_buffer;
+unsigned short cursor;
 
 void terminal_initialize(void) 
 {
@@ -57,6 +65,7 @@ void terminal_clearscreen(void)    //clear all screen and set prompt to up left 
   }
   terminal_row = 0;
   terminal_column = 0;
+  cursor = 0;
 }
  
 void terminal_scroll(void)         //scroll losing the first line written, need history? Have fun! :)
@@ -85,6 +94,8 @@ void terminal_putchar(char c)     //putchar with integrated scroll, NOT optimize
 
   }else {
     terminal_putentryat(c, terminal_color, terminal_column, terminal_row);
+    cursor++; //TODO: pay attention to scroll
+    fb_move_cursor(cursor);
     if (++terminal_column == VGA_WIDTH) {
       terminal_column = 0;
       if (++terminal_row == VGA_HEIGHT)
@@ -95,8 +106,9 @@ void terminal_putchar(char c)     //putchar with integrated scroll, NOT optimize
  
 void terminal_write(const char* data, size_t size) 
 {
-  for (size_t i = 0; i < size; i++)
+  for (size_t i = 0; i < size; i++){
     terminal_putchar(data[i]);
+  }
 }
 
 size_t strlen(const char* str)  //leave this here for the moment
@@ -110,4 +122,11 @@ size_t strlen(const char* str)  //leave this here for the moment
 void terminal_writestring(const char* data) 
 {
   terminal_write(data, strlen(data));
+}
+
+void fb_move_cursor(unsigned short pos){
+  outb(FB_COMMAND_PORT, FB_HIGH_BYTE_COMMAND);
+  outb(FB_DATA_PORT, ((pos >> 8 ) & 0x00FF));
+  outb(FB_COMMAND_PORT, FB_LOW_BYTE_COMMAND);
+  outb(FB_DATA_PORT, pos & 0x00FF);
 }

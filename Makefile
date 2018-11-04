@@ -2,7 +2,7 @@ CC = gcc
 AS = nasm
 CFLAGS = -std=gnu99 -O2 -nostdlib -ffreestanding -Wall -Wextra -m64 -Ikernel/include/
 ASFLAGS = -f elf64
-OBJECTS =  build/multiboot_header.o build/boot.o build/kernel.o build/tty.o
+OBJECTS =  build/multiboot_header.o build/boot.o build/kernel.o build/tty.o build/io.o
 
 default: run
 
@@ -15,6 +15,9 @@ build/multiboot_header.o: kernel/arch/x86-64/multiboot_header.asm
 build/boot.o: kernel/arch/x86-64/boot.asm
 	mkdir -p build
 	$(AS) -f elf64 kernel/arch/x86-64/boot.asm -o build/boot.o
+
+build/io.o: kernel/arch/x86-64/io.c
+	$(CC) -c kernel/arch/x86-64/io.c -o build/io.o $(CFLAGS)
 
 build/tty.o: kernel/arch/x86-64/tty.c
 	$(CC) -c kernel/arch/x86-64/tty.c -o build/tty.o $(CFLAGS)
