@@ -4,17 +4,7 @@
 
 #include <kernel/tty.h>
 #include <kernel/io.h>
-#include "vga.h"
-
-#define FB_COMMAND_PORT 0x3D4
-#define FB_DATA_PORT 0x3D5
-
-#define FB_HIGH_BYTE_COMMAND 14
-#define FB_LOW_BYTE_COMMAND 15
-
-static const size_t VGA_WIDTH = 80;
-static const size_t VGA_HEIGHT = 25;
-static uint16_t* const VGA_MEMORY = (uint16_t*) 0xB8000;
+#include <kernel/vga.h>
 
 size_t terminal_row;
 size_t terminal_column;
