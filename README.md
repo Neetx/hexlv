@@ -24,7 +24,7 @@ Clone - make - qemu
 git clone https://gitlab.com/Neetx/hexlv.git
 cd hexlv
 make
-qemu-system-x86_64 -cdrom build/hexlv.iso
+qemu-system-x86_64 -cdrom build/hexlv.iso -serial stdio
 ```
 ---
 
