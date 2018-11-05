@@ -1,29 +1,16 @@
 #include <kernel/io.h>
-#include <kernel/serial.h>
-#include <kernel/tty.h>
-
 #include <stddef.h>
-
-/* I/O ports */
-#define SERIAL_COM1_BASE 0x3f8  //COM1 base address
-
-#define SERIAL_DATA_PORT(base)			(base)
-#define SERIAL_FIFO_COMMAND_PORT(base)	(base + 2)
-#define SERIAL_LINE_COMMAND_PORT(base)	(base + 3)
-#define SERIAL_MODEM_COMMAND_PORT(base)	(base + 4)
-#define SERIAL_LINE_STATUS_PORT(base)	(base + 5)
+#include <kernel/serial.h>
 
 /* I/O commands */
 
 void init_serial(unsigned short com){ 
-	outb(com + 1, 0x00); 						//No interrupts
-	serial_conf_baud_rate(com, 0x03);			//set divisor (38400 baud)
-	outb(com + 1, 0x00), 						//hello byte
-	//outb(SERIAL_LINE_COMMAND_PORT(com), 0x03); 
-	serial_conf_line(com);						//8 bits no parity no stop bit
-	//outb(SERIAL_FIFO_COMMAND_PORT(com), 0xC7); 
-	serial_conf_buffer(com);
-	outb(SERIAL_MODEM_COMMAND_PORT(com), 0x0B); //IRQs enabled, RTS/DSR set
+	outb(SERIAL_ENABLE_INTERRUPT_PORT(com), 0x00); 		//No interrupts
+	outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_ENABLE_DLAB); //enable DLAB
+	serial_conf_baud_rate(com, 0x03);	//set divisor (38400 baud)
+	serial_conf_line(com);				//8 bits no parity no stop bit
+	serial_conf_buffer(com);			//enable FIFO clearing with 14 byte
+	serial_conf_modem(com); 			//IRQs enabled, RTS/DSR set
 }
 
 int serial_received(unsigned short com){
@@ -74,9 +61,10 @@ int serial_is_transmit_fifo_empty(unsigned short com){
 /* Baud rate configuration by divisor:  115200 / divisor */
 
 void serial_conf_baud_rate(unsigned short com, unsigned short divisor){
-	outb(SERIAL_LINE_COMMAND_PORT(com), SERIAL_LINE_ENABLE_DLAB); //enable DLAB
-	outb(SERIAL_DATA_PORT(com), (divisor >> 8 ) & 0x00FF ); 
-	outb(SERIAL_DATA_PORT(com), divisor & 0x00FF );			//set divisor
+	//outb(SERIAL_DATA_PORT(com), (divisor >> 8 ) & 0x00FF ); 
+	//outb(SERIAL_DATA_PORT(com), divisor & 0x00FF );
+	outb(SERIAL_DATA_PORT(com), divisor);				//low byte
+	outb(SERIAL_ENABLE_INTERRUPT_PORT(com), 0x00);		//high byte
 }
 
 void serial_conf_line(unsigned short com){
@@ -88,5 +76,5 @@ void serial_conf_buffer(unsigned short com){
 }
 
 void serial_conf_modem(unsigned short com){
-	outb(SERIAL_LINE_COMMAND_PORT(com), 0x03);
+	outb(SERIAL_MODEM_COMMAND_PORT(com), 0x0B);
 }
