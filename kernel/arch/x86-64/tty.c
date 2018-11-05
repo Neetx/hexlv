@@ -76,6 +76,9 @@ void terminal_putchar(char c)     //putchar with integrated scroll, NOT optimize
 {
   if(c == '\n'){
     terminal_column = 0;
+    cursor -= cursor % VGA_WIDTH;
+    cursor += VGA_WIDTH;
+    fb_move_cursor(cursor);
     if(terminal_row == VGA_HEIGHT-1){
       terminal_scroll();
     }else {
