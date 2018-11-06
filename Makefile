@@ -2,7 +2,7 @@ CC = gcc
 AS = nasm
 CFLAGS = -std=gnu99 -O2 -nostdlib -ffreestanding -Wall -Wextra -m64 -Ikernel/include/
 ASFLAGS = -f elf64
-OBJECTS =  build/multiboot_header.o build/boot.o build/kernel.o build/tty.o build/io.o build/serial.o
+OBJECTS =  build/multiboot_header.o build/boot.o build/kernel.o build/tty.o build/io.o build/serial.o build/keyboard.o
 
 default: run
 
@@ -24,6 +24,9 @@ build/tty.o: kernel/arch/x86-64/tty.c
 
 build/serial.o: kernel/include/kernel/serial.c
 	$(CC) -c kernel/include/kernel/serial.c -o build/serial.o $(CFLAGS)
+
+build/keyboard.o: kernel/include/kernel/keyboard.c
+	$(CC) -c kernel/include/kernel/keyboard.c -o build/keyboard.o $(CFLAGS)
 
 build/kernel.o: kernel/kernel/kernel.c
 	$(CC) -c kernel/kernel/kernel.c -o build/kernel.o $(CFLAGS)

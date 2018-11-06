@@ -10,6 +10,12 @@
 #define FB_HIGH_BYTE_COMMAND 14
 #define FB_LOW_BYTE_COMMAND 15
 
+size_t terminal_row;
+size_t terminal_column;
+uint8_t terminal_color;
+uint16_t *terminal_buffer;
+unsigned short cursor;
+
 void terminal_initialize(void);
 void terminal_setcolor(uint8_t color);
 void terminal_putentryat(char c, uint8_t color, size_t x, size_t y);

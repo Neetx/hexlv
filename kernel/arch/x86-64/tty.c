@@ -6,12 +6,6 @@
 #include <kernel/io.h>
 #include <kernel/vga.h>
 
-size_t terminal_row;
-size_t terminal_column;
-uint8_t terminal_color;
-uint16_t *terminal_buffer;
-unsigned short cursor;
-
 void terminal_initialize(void) 
 {
   terminal_row = 0;
