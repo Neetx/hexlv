@@ -95,26 +95,6 @@ char* itoa(int i, char b[]){          //From integer to ascii, thanks to SENDRAY
     return b;
 }
 
-int strcmp(const char *str1, const char *str2){
-  int res = 1;
-  int i = 0;
-  if(strlen(str1) == strlen(str2)){
-    while(str1[i] != 0x0A && str2[i] != 0x0A){
-      if(str1[i] != str2[i]){
-        res = 0;
-      }
-      i++;
-    }
-  }else{res = 0;}
-  return res;
-}
-
 bool isascii(int c){
   return c >= 0 && c<128;
-}
-
-void memset(char* buffer, char ch, int len){    //I really need this!!
-  for(int i=0;i<len;i++){
-    buffer[i]=ch;
-  }
 }

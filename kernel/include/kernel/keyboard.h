@@ -14,8 +14,6 @@ void getline(char* string, int len);
 
 // Leave here for now
 bool isascii(int c);
-int strcmp(const char *str1, const char *str2);
 char* itoa(int i, char b[]);
-void memset(char* buffer, char ch, int len);
 
 #endif

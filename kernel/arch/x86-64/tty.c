@@ -5,6 +5,7 @@
 #include <kernel/tty.h>
 #include <kernel/io.h>
 #include <kernel/vga.h>
+#include <string.h>
 
 void terminal_initialize(void) 
 {
@@ -96,14 +97,6 @@ void terminal_write(const char* data, size_t size)
   for (size_t i = 0; i < size; i++){
     terminal_putchar(data[i]);
   }
-}
-
-size_t strlen(const char* str)  //leave this here for the moment
-{
-  size_t len = 0;
-  while (str[len])
-    len++;
-  return len;
 }
  
 void terminal_writestring(const char* data) 
